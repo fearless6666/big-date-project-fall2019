@@ -84,6 +84,10 @@ for fname in f_name_list:
       # Judge whether the type of input is time
       def isTime(x):
           try:
+              if 'AM' in x:
+                  x = x.split('AM')
+              if 'PM' in x:
+                  x = x.split('PM')
               x = x.split(':')
               if (len(x) == 3):
                   datetime.time(x[0], x[1], x[2])
@@ -258,8 +262,8 @@ for fname in f_name_list:
               text_min = textset.filter("length > 0").orderBy('length', ascending=True).select(header[i]).take(5)
               text_avg = \
               textset.groupBy('data_type').avg('length').toDF("data_type", "mean").select("mean").rdd.collect()[0][0]
-              text_temp = {"type": "TEXT", "count": len(textset.rdd.collect()), "shortest_values": text_max,
-                           "longest_values": text_min, "average_length": text_avg}
+              text_temp = {"type": "TEXT", "count": len(textset.rdd.collect()), "shortest_values": text_min,
+                           "longest_values": text_max, "average_length": text_avg}
               column_data_types.append(text_temp)
 
           column_info = {"column_name": header[i], "number_non_empty_cells": r1, "number_empty_cells": r2,
